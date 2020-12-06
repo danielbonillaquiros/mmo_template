@@ -5,16 +5,14 @@ const config = {
     width: 800,
     height: 600,
     scene: {
-        preload,
+        preload: () => {
+            console.log('test');
+        },
         create,
     },
 };
 
 const game = new Phaser.Game(config);
-
-function preload() {
-    console.log('this is the preload method')
-}
 
 function create() {
     this.add.text(0, 0, 'hello world');
