@@ -7,7 +7,7 @@ module.exports = {
         rules: [
             {
                 test: [/\.vert$/, /\.frag$/],
-                use: 'raw-loader',
+                use: 'raw-loader'
             }
         ],
     },
