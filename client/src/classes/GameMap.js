@@ -1,4 +1,4 @@
-export default class Map {
+export default class GameMap {
   constructor(scene, key, tileSetName, bgLayerName, blockedLayerName) {
     this.scene = scene; // the scene this map belongs to
     this.key = key; // tiled JSON file key name
@@ -11,30 +11,30 @@ export default class Map {
 
   createMap() {
     // create tilemap
-    this.map = this.scene.make.tilemap({ key: this.key });
+    this.tilemap = this.scene.make.tilemap({ key: this.key });
 
     // add tileset image to the map
-    this.tiles = this.map.addTilesetImage(this.tileSetName, this.tileSetName, 32, 32, 1, 2);
+    this.tiles = this.tilemap.addTilesetImage(this.tileSetName, this.tileSetName, 32, 32, 1, 2);
 
     // create background layer
-    this.backgroundLayer = this.map.createStaticLayer(this.bgLayerName, this.tiles, 0, 0);
+    this.backgroundLayer = this.tilemap.createStaticLayer(this.bgLayerName, this.tiles, 0, 0);
     this.backgroundLayer.setScale(2, 2);
 
     // create blocked layer
-    this.blockedLayer = this.map.createStaticLayer(this.blockedLayerName, this.tiles, 0, 0);
+    this.blockedLayer = this.tilemap.createStaticLayer(this.blockedLayerName, this.tiles, 0, 0);
     this.blockedLayer.setScale(2, 2);
     this.blockedLayer.setCollisionByExclusion([-1]);
 
     // update the world bounds
-    this.scene.physics.world.bounds.width = this.map.widthInPixels * 2;
-    this.scene.physics.world.bounds.height = this.map.heightInPixels * 2;
+    this.scene.physics.world.bounds.width = this.tilemap.widthInPixels * 2;
+    this.scene.physics.world.bounds.height = this.tilemap.heightInPixels * 2;
 
     // limit the camera to the size of our map
     this.scene.cameras.main.setBounds(
       0,
       0,
-      this.map.widthInPixels * 2,
-      this.map.heightInPixels * 2,
+      this.tilemap.widthInPixels * 2,
+      this.tilemap.heightInPixels * 2,
     );
   }
 }

@@ -1,4 +1,4 @@
-import v4 from 'uuid/v4';
+import { v4 } from 'uuid';
 
 export default class PlayerModel {
   constructor(spawnLocations) {
@@ -24,9 +24,6 @@ export default class PlayerModel {
   respawn() {
     this.health = this.maxHealth;
     const location = this.spawnLocations[Math.floor(Math.random() * this.spawnLocations.length)];
-    // [this.x, this.y] = location; // game world has twice the size
-    // so coordinates may fail and player respawn on the water
-    // this is the fix
     this.x = location[0] * 2;
     this.y = location[1] * 2;
   }
