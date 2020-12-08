@@ -22,4 +22,4 @@ router.post('/chat', async (request, response) => {
   }
 });
 
-module.exports = router;
+export default router;

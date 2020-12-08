@@ -46,7 +46,6 @@ router.post('/forgot-password', async (request, response) => {
 
   // update user reset password token and exp
   await UserModel.findByIdAndUpdate(
-    // eslint-disable-next-line no-underscore-dangle
     { _id: user._id },
     {
       resetToken: token,
@@ -114,4 +113,4 @@ router.post('/reset-password', async (request, response) => {
   });
 });
 
-module.exports = router;
+export default router;
