@@ -1,11 +1,13 @@
 const express = require('express');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
+const tokenList = {};
 const router = express.Router();
 
-router.get('/', (request, response) => {
-    response.send('Hello world!');
-});
+// router.get('/', (request, response) => {
+//     response.send('Hello world!');
+// });
 
 router.get('/status', (request, response) => {
     response.status(200).json({
@@ -14,15 +16,15 @@ router.get('/status', (request, response) => {
     });
 });
 
-router.post('/signup', passport.authenticate('signup', { session: false }), (request, response, next) => {
+router.post('/signup', passport.authenticate('signup', { session: false }), async (request, response, next) => {
     response.status(200).json({
         message: 'signup successful',
         status: 200
     });
 });
 
-router.post('/login', (request, response, next) => {
-    passport.authenticate('login', (error, user) => {
+router.post('/login', async (request, response, next) => {
+    passport.authenticate('login', async (error, user) => {
         try {
             if (error) {
                 return next(error);
@@ -33,7 +35,32 @@ router.post('/login', (request, response, next) => {
 
             request.login(user, { session: false }, (err) => {
                 if (err) return next(err);
-                return response.status(200).json({ user, status: 200 });
+
+                // create jwt
+                const body = {
+                    _id: user._id,
+                    email: user.email,
+                    name: user.username,
+                };
+
+                const token = jwt.sign({ user: body }, process.env.JWT_SECRET, { expiresIn: 300 });
+                const refreshToken = jwt.sign({ user: body }, process.env.JWT_REFRESH_SECRET, { expiresIn: 86400 });
+
+                // store tokens in cookie
+                response.cookie('jwt', token);
+                response.cookie('refreshJwt', refreshToken);
+
+                // store tokens in memory
+                tokenList[refreshToken] = {
+                    token,
+                    refreshToken,
+                    email: user.email,
+                    _id: user._id,
+                    name: user.name,
+                };
+
+                // send the token to the user
+                return response.status(200).json({ token, refreshToken, status: 200 });
             });
         } catch (err) {
             console.log(err);
@@ -42,33 +69,51 @@ router.post('/login', (request, response, next) => {
     })(request, response, next);
 });
 
-router.post('/logout', (request, response) => {
-    if (!request.body) {
-        response.status(400).json({
-            message: 'Invalid body',
-            status: 400
-        });
-    } else {
+router.route('/logout')
+    .get(processLogoutRequest)
+    .post(processLogoutRequest);
+
+router.post('/token', (request, response) => {
+    const { refreshToken } = request.body;
+    if (refreshToken in tokenList) {
+        const body = {
+            email: tokenList[refreshToken].email,
+            _id: tokenList[refreshToken]._id,
+            name: tokenList[refreshToken].name,
+        };
+        const token = jwt.sign({ user: body }, process.env.JWT_SECRET, { expiresIn: 300 });
+
+        //update jwt
+        response.cookie('jwt', token);
+        tokenList[refreshToken].token = token;
+
         response.status(200).json({
-            message: 'OK',
+            token,
             status: 200
+        });// 
+    } else {
+        response.status(401).json({
+            message: 'Unauthorized',
+            status: 401
         });
     }
 });
 
-router.post('/token', (request, response) => {
-    if (!request.body || !request.body.refreshToken) {
-        response.status(400).json({
-            message: 'Invalid body',
-            status: 400
-        });
-    } else {
-        const { refreshToken } = request.body;
+function processLogoutRequest(request, response) {
+    if (request.cookies) {
+        const refreshToken = request.cookies.refreshJwt;
+        if (refreshToken in tokenList) delete tokenList[refreshToken];
+        response.clearCookie('jwt');
+        response.clearCookie('refreshJwt');
+    }
+    if (request.method === 'POST') {
         response.status(200).json({
-            message: `refresh token requested for token ${refreshToken}`,
+            message: 'Logged out',
             status: 200
         });
+    } else if (request.method === 'GET') {
+        response.sendFile('logout.html', { root: './public' });
     }
-});
+}
 
 module.exports = router;
