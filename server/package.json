@@ -6,18 +6,33 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "nodemon": "npx nodemon index.js"
+    "nodemon": "npx nodemon index.js --exec babel-node",
+    "mongo": "mongod --config /usr/local/etc/mongod.conf --fork"
   },
   "author": "Daniel Bonilla",
   "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/node": "^7.12.6",
+    "@babel/preset-env": "^7.12.7",
+    "babel-loader": "^8.2.2",
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.3",
+    "nodemailer": "^6.4.16",
+    "nodemailer-express-handlebars": "^4.0.0",
     "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   }
 }

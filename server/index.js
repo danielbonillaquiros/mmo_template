@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const express = require('express');
+import express from 'express';
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -13,7 +13,7 @@ const passwordRoutes = require('./routes/password');
 const uri = process.env.MONGO_CONNECTION_URL;
 const mongoConfig = {
     useNewUrlParser: true,
-    userCreateIndex: true,
+    useCreateIndex: true,
 };
 if (process.env.MONGO_USER_NAME && process.env.MONGO_PASSWORD) {
     mongoConfig.auth = { authSource: 'admin' };
