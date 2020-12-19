@@ -10,6 +10,7 @@ import passport from 'passport';
 import routes from './routes/main';
 import passwordRoutes from './routes/password';
 import secureRoutes from './routes/secure';
+import GameManager from './game_manager/GameManager';
 
 // setup mongo connection
 const uri = process.env.MONGO_CONNECTION_URL;
@@ -39,24 +40,8 @@ const io = require('socket.io')(server, {
   },
 });
 
-io.on('connection', (socket) => {
-  // player disconnected
-  socket.on('disconnect', () => {
-    console.log('player disconnected to our game');
-    console.log(socket.id);
-  });
-
-  socket.on('newPlayer', (obj) => {
-    console.log(obj);
-    console.log('new player event received');
-    socket.broadcast.emit('newPlayer', socket.id, 'everyone but original socket');
-    io.emit('newPlayer', socket.id, 'everyone');
-  });
-
-  // player connected to our game
-  console.log('player connected to our game');
-  console.log(socket.id);
-});
+const gameManager = new GameManager(io);
+gameManager.setup();
 
 const port = process.env.PORT || 3000;
 

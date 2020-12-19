@@ -3,7 +3,7 @@ import Player from './Player';
 import Direction from '../../utils/direction';
 
 export default class PlayerContainer extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, key, frame, health, maxHealth, id, attackAudio) {
+  constructor(scene, x, y, key, frame, health, maxHealth, id, attackAudio, mainPlayer) {
     super(scene, x, y);
     this.scene = scene;
     this.velocity = 160;
@@ -15,6 +15,7 @@ export default class PlayerContainer extends Phaser.GameObjects.Container {
     this.maxHealth = maxHealth;
     this.id = id;
     this.attackAudio = attackAudio;
+    this.mainPlayer = mainPlayer;
 
     // set a size on the container
     this.setSize(64, 64);
@@ -24,8 +25,11 @@ export default class PlayerContainer extends Phaser.GameObjects.Container {
     this.body.setCollideWorldBounds(true);
     // add player container to our existing scene
     this.scene.add.existing(this);
-    // have the camera follow the player
-    this.scene.cameras.main.startFollow(this);
+
+    if (this.mainPlayer) {
+      // have the camera follow the player
+      this.scene.cameras.main.startFollow(this);
+    }
 
     // create the player
     this.player = new Player(this.scene, 0, 0, key, frame);
