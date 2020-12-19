@@ -12,6 +12,18 @@ export default class GameScene extends Phaser.Scene {
 
   init() {
     this.scene.launch('Ui');
+
+    // get a reference to our socket variable
+    this.socket = this.sys.game.globals.socket;
+
+    // listen for socket events
+    this.listenForSocketEvents();
+  }
+
+  listenForSocketEvents() {
+    this.socket.on('newPlayer', (socketId, test) => {
+      console.log('new player event', socketId, test);
+    });
   }
 
   create() {
@@ -21,6 +33,9 @@ export default class GameScene extends Phaser.Scene {
     this.createInput();
 
     this.createGameManager();
+
+    // emit event to server that a new player joined
+    this.socket.emit('newPlayer', { test: 1234 });
   }
 
   update() {

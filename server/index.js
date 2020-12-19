@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import path from 'path';
 import express from 'express';
-
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -33,6 +32,32 @@ mongoose.connection.on('error', (error) => {
 mongoose.set('useFindAndModify', false);
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: process.env.CORS_ORIGIN,
+  },
+});
+
+io.on('connection', (socket) => {
+  // player disconnected
+  socket.on('disconnect', () => {
+    console.log('player disconnected to our game');
+    console.log(socket.id);
+  });
+
+  socket.on('newPlayer', (obj) => {
+    console.log(obj);
+    console.log('new player event received');
+    socket.broadcast.emit('newPlayer', socket.id, 'everyone but original socket');
+    io.emit('newPlayer', socket.id, 'everyone');
+  });
+
+  // player connected to our game
+  console.log('player connected to our game');
+  console.log(socket.id);
+});
+
 const port = process.env.PORT || 3000;
 
 // updating express settings
@@ -78,7 +103,7 @@ app.use((error, request, response, next) => {
 
 mongoose.connection.on('connected', () => {
   console.log('connected to mongo');
-  app.listen(port, () => {
+  server.listen(port, () => {
     console.log(`server is running on port: ${port}`);
   });
 });
