@@ -51,6 +51,17 @@ export default class GameScene extends Phaser.Scene {
     this.socket.on('spawnPlayer', (player) => {
       this.createPlayer(player, false);
     });
+
+    this.socket.on('playerMoved', (player) => {
+      this.otherPlayers.getChildren().forEach((otherPlayer) => {
+        if (player.id === otherPlayer.id) {
+          otherPlayer.flipX = player.flipX;
+          otherPlayer.setPosition(player.x, player.y);
+          otherPlayer.updateHealthBar();
+          otherPlayer.updateFlipX();
+        }
+      });
+    });
   }
 
   create() {
@@ -67,6 +78,22 @@ export default class GameScene extends Phaser.Scene {
 
   update() {
     if (this.player) this.player.update(this.cursors);
+
+    if (this.player) {
+      // emit player movement to the server
+      const { x, y , flipX } = this.player;
+      if (this.player.oldPosition && (x !== this.player.oldPosition.x
+        || y !== this.player.oldPosition.y || flipX !== this.player.oldPosition.flipX)) {
+        this.socket.emit('playerMovement', { x, y, flipX });
+      }
+
+      // save old position data
+      this.player.oldPosition = {
+        x: this.player.x,
+        y: this.player.y,
+        flipX: this.player.flipX,
+      };
+    }
   }
 
   createAudio() {

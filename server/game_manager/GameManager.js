@@ -49,6 +49,17 @@ export default class GameManager {
         socket.broadcast.emit('spawnPlayer', this.players[socket.id]);
       });
 
+      socket.on('playerMovement', (playerData) => {
+        if (this.players[socket.id]) {
+          this.players[socket.id].x = playerData.x;
+          this.players[socket.id].y = playerData.y;
+          this.players[socket.id].flipX = playerData.flipX;
+
+          // emit a message to all players about the player that moved
+          this.io.emit('playerMoved', this.players[socket.id]);
+        }
+      });
+
       // player connected to our game
       console.log('player connected to our game');
       console.log(socket.id);
