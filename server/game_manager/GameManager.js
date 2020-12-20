@@ -54,6 +54,8 @@ export default class GameManager {
           this.players[socket.id].x = playerData.x;
           this.players[socket.id].y = playerData.y;
           this.players[socket.id].flipX = playerData.flipX;
+          this.players[socket.id].playerAttacking = playerData.playerAttacking;
+          this.players[socket.id].currentDirection = playerData.currentDirection;
 
           // emit a message to all players about the player that moved
           this.io.emit('playerMoved', this.players[socket.id]);

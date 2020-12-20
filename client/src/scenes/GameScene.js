@@ -59,6 +59,11 @@ export default class GameScene extends Phaser.Scene {
           otherPlayer.setPosition(player.x, player.y);
           otherPlayer.updateHealthBar();
           otherPlayer.updateFlipX();
+          otherPlayer.playerAttacking = player.playerAttacking;
+          otherPlayer.currentDirection = player.currentDirection;
+          if (player.playerAttacking) {
+            otherPlayer.attack();
+          }
         }
       });
     });
@@ -81,10 +86,16 @@ export default class GameScene extends Phaser.Scene {
 
     if (this.player) {
       // emit player movement to the server
-      const { x, y , flipX } = this.player;
+      const {
+        x, y, flipX, playerAttacking, currentDirection,
+      } = this.player;
       if (this.player.oldPosition && (x !== this.player.oldPosition.x
-        || y !== this.player.oldPosition.y || flipX !== this.player.oldPosition.flipX)) {
-        this.socket.emit('playerMovement', { x, y, flipX });
+        || y !== this.player.oldPosition.y || flipX !== this.player.oldPosition.flipX
+        || playerAttacking !== this.player.oldPosition.playerAttacking
+        || currentDirection !== this.player.oldPosition.currentDirection)) {
+        this.socket.emit('playerMovement', {
+          x, y, flipX, playerAttacking, currentDirection,
+        });
       }
 
       // save old position data
@@ -92,6 +103,8 @@ export default class GameScene extends Phaser.Scene {
         x: this.player.x,
         y: this.player.y,
         flipX: this.player.flipX,
+        playerAttacking: this.player.playerAttacking,
+        currentDirection: this.player.currentDirection,
       };
     }
   }
@@ -135,6 +148,7 @@ export default class GameScene extends Phaser.Scene {
 
     // create an other players group
     this.otherPlayers = this.physics.add.group();
+    this.otherPlayers.runChildUpdate = true;
   }
 
   spawnChest(chestObject) {

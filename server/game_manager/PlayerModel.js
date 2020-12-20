@@ -3,6 +3,7 @@ export default class PlayerModel {
     this.health = 10;
     this.maxHealth = 10;
     this.gold = 0;
+    this.playerAttacking = false;
     this.flipX = true;
     this.id = playerId;
     this.spawnLocations = spawnLocations;
