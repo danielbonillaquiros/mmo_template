@@ -1,19 +1,6 @@
 import * as Phaser from 'phaser';
 import UiButton from '../classes/UiButton';
-
-function postData(url, data = {}) {
-  return fetch(url, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'include', // needed for cookies
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    body: JSON.stringify(data),
-  }).then((response) => { response.json(); });
-}
+import { postData } from '../utils/utils';
 
 export default class LoginScene extends Phaser.Scene {
   constructor() {
