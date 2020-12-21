@@ -1,6 +1,20 @@
 import * as Phaser from 'phaser';
 import UiButton from '../classes/UiButton';
 
+function postData(url, data = {}) {
+  return fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'include', // needed for cookies
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    body: JSON.stringify(data),
+  }).then((response) => { response.json(); });
+}
+
 export default class LoginScene extends Phaser.Scene {
   constructor() {
     super('Login');
@@ -14,18 +28,27 @@ export default class LoginScene extends Phaser.Scene {
     this.button1 = new UiButton(
       this,
       this.scale.width / 2,
-      this.scale.height * 0.65,
+      this.scale.height * 0.60,
+      'button1',
+      'button2',
+      'Login',
+      this.login.bind(this),
+    );
+
+    this.button2 = new UiButton(
+      this,
+      this.scale.width / 2,
+      this.scale.height * 0.75,
       'button1',
       'button2',
       'Forgot Password',
       this.startScene.bind(this, 'ForgotPassword'),
     );
 
-    // create a sign up button
-    this.loginButton = new UiButton(
+    this.button3 = new UiButton(
       this,
       this.scale.width / 2,
-      this.scale.height * 0.80,
+      this.scale.height * 0.90,
       'button1',
       'button2',
       'Back',
@@ -80,6 +103,27 @@ export default class LoginScene extends Phaser.Scene {
   }
 
   startScene(targetScene) {
+    this.div.parentNode.removeChild(this.div);
     this.scene.start(targetScene);
+  }
+
+  login() {
+    const loginValue = this.loginInput.value;
+    const passwordValue = this.passwordInput.value;
+
+    postData('http://localhost:3000/login', {
+      email: loginValue,
+      password: passwordValue,
+    }).then((response) => {
+      if (response.status === 200) {
+        this.startScene('Game');
+      } else {
+        console.log(response.error);
+        window.alert('Invalid username or password');
+      }
+    }).catch((error) => {
+      console.log(error.message);
+      window.alert('Invalid username or password');
+    });
   }
 }
