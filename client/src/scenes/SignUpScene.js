@@ -1,9 +1,9 @@
 import * as Phaser from 'phaser';
 import UiButton from '../classes/UiButton';
 
-export default class TitleScene extends Phaser.Scene {
+export default class SignUpScene extends Phaser.Scene {
   constructor() {
-    super('Title');
+    super('SignUp');
   }
 
   create() {
