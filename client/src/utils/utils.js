@@ -9,7 +9,7 @@ export function postData(url, data = {}) {
     },
     redirect: 'follow',
     body: JSON.stringify(data),
-  }).then((response) => { response.json(); });
+  }).then(response => response.json());
 }
 
 export function createDiv(className) {
