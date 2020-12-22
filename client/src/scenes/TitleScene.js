@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import UiButton from '../classes/UiButton';
+import { getParam } from '../utils/utils';
 
 export default class TitleScene extends Phaser.Scene {
   constructor() {
@@ -32,6 +33,12 @@ export default class TitleScene extends Phaser.Scene {
       'Sign Up',
       this.startScene.bind(this, 'SignUp'),
     );
+
+    const resetPasswordSceneCheck = getParam('scene');
+
+    if (resetPasswordSceneCheck && resetPasswordSceneCheck === 'resetPassword') {
+      this.scene.start('ResetPassword');
+    }
   }
 
   startScene(targetScene) {

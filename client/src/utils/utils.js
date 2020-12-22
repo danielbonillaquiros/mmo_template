@@ -39,3 +39,8 @@ export function createInputField(inputType, name, id, className, placeholder) {
 export function createBrElement() {
   return document.createElement('br');
 }
+
+export function getParam(param) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(param);
+}

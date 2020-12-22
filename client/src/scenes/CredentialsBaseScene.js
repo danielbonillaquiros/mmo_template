@@ -65,6 +65,7 @@ export default class CredentialsBaseScene extends Phaser.Scene {
   }
 
   startScene(targetScene) {
+    window.history.pushState({}, document.title, '/');
     this.div.parentNode.removeChild(this.div);
     this.scene.start(targetScene);
   }

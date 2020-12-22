@@ -5,6 +5,7 @@ import UiScene from './UiScene';
 import LoginScene from './LoginScene';
 import SignUpScene from './SignUpScene';
 import ForgotPasswordScene from './ForgotPasswordScene';
+import ResetPasswordScene from './ResetPasswordScene';
 
 export default [
   BootScene,
@@ -14,4 +15,5 @@ export default [
   LoginScene,
   SignUpScene,
   ForgotPasswordScene,
+  ResetPasswordScene,
 ];
