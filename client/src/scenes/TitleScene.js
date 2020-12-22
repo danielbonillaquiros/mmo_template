@@ -9,7 +9,7 @@ export default class TitleScene extends Phaser.Scene {
 
   create() {
     // create title text
-    this.titleText = this.add.text(this.scale.width / 2, this.scale.height / 2, 'Zenva MMORPG', { fontSize: '64px', fill: '#fff' });
+    this.titleText = this.add.text(this.scale.width / 2, this.scale.height / 2, 'Zenva MMORPG', { fontSize: '128px', fill: '#fff' });
     this.titleText.setOrigin(0.5);
 
     // create a login button
@@ -24,7 +24,7 @@ export default class TitleScene extends Phaser.Scene {
     );
 
     // create a sign up button
-    this.loginButton = new UiButton(
+    this.signUpButton = new UiButton(
       this,
       this.scale.width / 2,
       this.scale.height * 0.80,
@@ -39,9 +39,38 @@ export default class TitleScene extends Phaser.Scene {
     if (resetPasswordSceneCheck && resetPasswordSceneCheck === 'resetPassword') {
       this.scene.start('ResetPassword');
     }
+
+    // handle game resize
+    this.scale.on('resize', this.resize, this);
   }
 
   startScene(targetScene) {
     this.scene.start(targetScene);
+  }
+
+  resize(gameSize) {
+    const { width, height } = gameSize;
+
+    this.cameras.resize(width, height);
+    this.titleText.setPosition(width / 2, height / 2);
+    this.loginButton.setPosition(width / 2, height * 0.65);
+    this.signUpButton.setPosition(width / 2, height * 0.75);
+
+    if (width < 1000) this.titleText.setFontSize('64px');
+    else this.titleText.setFontSize('128px');
+
+    if (height < 700) {
+      this.titleText.setPosition(width / 2, height * 0.4);
+      this.loginButton.setPosition(width / 2, height * 0.55);
+      this.loginButton.setScale(0.5);
+      this.signUpButton.setPosition(width / 2, height * 0.65);
+      this.signUpButton.setScale(0.5);
+    } else {
+      this.titleText.setPosition(width / 2, height / 2);
+      this.loginButton.setPosition(width / 2, height * 0.65);
+      this.loginButton.setScale(1);
+      this.signUpButton.setPosition(width / 2, height * 0.75);
+      this.signUpButton.setScale(1);
+    }
   }
 }
