@@ -66,11 +66,13 @@ export default class GameManager {
 
       socket.on('newPlayer', (token) => {
         try {
+          // TODO: re-enable logic
           // validate token, if valid send game information, else reject login
-          const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          // const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
           // get player's name
-          const { name } = decoded.user;
+          // const { name } = decoded.user;
+          const name = 'test';
 
           // create a new Player
           this.spawnPlayer(socket.id, name);
