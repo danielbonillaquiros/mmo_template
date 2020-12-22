@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import PlayerModel from './PlayerModel';
 import * as levelData from '../public/assets/level/large_level.json';
 import Spawner from './Spawner';
@@ -63,21 +64,32 @@ export default class GameManager {
         this.io.emit('player_disconnect', socket.id);
       });
 
-      socket.on('newPlayer', () => {
-        // create a new Player
-        this.spawnPlayer(socket.id);
+      socket.on('newPlayer', (token) => {
+        try {
+          // validate token, if valid send game information, else reject login
+          const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // send the players object to the new player
-        socket.emit('currentPlayers', this.players);
+          // get player's name
+          const { name } = decoded.user;
 
-        // send the monsters object to the new player
-        socket.emit('currentMonsters', this.monsters);
+          // create a new Player
+          this.spawnPlayer(socket.id, name);
 
-        // send the chests object to the new player
-        socket.emit('currentChests', this.chests);
+          // send the players object to the new player
+          socket.emit('currentPlayers', this.players);
 
-        // inform the other players of the new player that joined
-        socket.broadcast.emit('spawnPlayer', this.players[socket.id]);
+          // send the monsters object to the new player
+          socket.emit('currentMonsters', this.monsters);
+
+          // send the chests object to the new player
+          socket.emit('currentChests', this.chests);
+
+          // inform the other players of the new player that joined
+          socket.broadcast.emit('spawnPlayer', this.players[socket.id]);
+        } catch (error) {
+          console.log(error.message);
+          socket.emit('invalidToken');
+        }
       });
 
       socket.on('playerMovement', (playerData) => {
@@ -227,8 +239,8 @@ export default class GameManager {
     });
   }
 
-  spawnPlayer(playerId) {
-    const player = new PlayerModel(playerId, this.playerLocations, this.players);
+  spawnPlayer(playerId, name) {
+    const player = new PlayerModel(playerId, this.playerLocations, this.players, name);
     this.players[playerId] = player;
   }
 
