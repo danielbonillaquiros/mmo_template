@@ -37,18 +37,23 @@ export default class TitleScene extends Phaser.Scene {
     const resetPasswordSceneCheck = getParam('scene');
 
     if (resetPasswordSceneCheck && resetPasswordSceneCheck === 'resetPassword') {
+      this.scale.removeListener('resize', this.resize);
       this.scene.start('ResetPassword');
     }
 
     // handle game resize
     this.scale.on('resize', this.resize, this);
+    // resize our game
+    this.resize({ height: this.scale.height, width: this.scale.width });
   }
 
   startScene(targetScene) {
+    this.scale.removeListener('resize', this.resize);
     this.scene.start(targetScene);
   }
 
   resize(gameSize) {
+    console.log('resize called from title scene');
     const { width, height } = gameSize;
 
     this.cameras.resize(width, height);
@@ -62,9 +67,9 @@ export default class TitleScene extends Phaser.Scene {
     if (height < 700) {
       this.titleText.setPosition(width / 2, height * 0.4);
       this.loginButton.setPosition(width / 2, height * 0.55);
-      this.loginButton.setScale(0.5);
-      this.signUpButton.setPosition(width / 2, height * 0.65);
-      this.signUpButton.setScale(0.5);
+      this.loginButton.setScale(0.7);
+      this.signUpButton.setPosition(width / 2, height * 0.7);
+      this.signUpButton.setScale(0.7);
     } else {
       this.titleText.setPosition(width / 2, height / 2);
       this.loginButton.setPosition(width / 2, height * 0.65);
