@@ -40,6 +40,6 @@ export default class BootScene extends Phaser.Scene {
 
   create() {
     // this.scene.start('Title');
-    this.scene.start('Login');
+    this.scene.start('ForgotPassword');
   }
 }
