@@ -44,3 +44,32 @@ export function getParam(param) {
   const params = new URLSearchParams(window.location.search);
   return params.get(param);
 }
+
+export function getCookie(cname) {
+  const name = `${cname}=`;
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const ca = decodedCookie.split(';');
+  for (let i = 0; i < ca.length; i += 1) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return '';
+}
+
+export function refreshTokenInterval() {
+  setInterval(() => {
+    postData('http://localhost:3000/token', {
+      refreshToken: getCookie('refreshJwt'),
+    }).then(() => {})
+      .catch((error) => {
+        console.log(error.message);
+        window.alert('Token is no longer valid, please login again');
+        window.location.replace('/index.html');
+      });
+  });
+}

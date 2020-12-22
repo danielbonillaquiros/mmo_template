@@ -1,5 +1,5 @@
 import CredentialsBaseScene from './CredentialsBaseScene';
-import { postData } from '../utils/utils';
+import { postData, refreshTokenInterval } from '../utils/utils';
 
 export default class LoginScene extends CredentialsBaseScene {
   constructor() {
@@ -20,6 +20,7 @@ export default class LoginScene extends CredentialsBaseScene {
         password: passwordValue,
       }).then((response) => {
         if (response.status === 200) {
+          refreshTokenInterval();
           this.startScene('Game');
         } else {
           console.log(response.error);
