@@ -30,7 +30,7 @@ export default class SignUpScene extends CredentialsBaseScene {
     const userNameValue = this.userNameInput.value;
 
     if (loginValue && passwordValue && userNameValue) {
-      postData('http://localhost:3000/signup', {
+      postData(`${SERVER_URL}/signup`, {
         email: loginValue,
         password: passwordValue,
         username: userNameValue,

@@ -32,7 +32,7 @@ export default class ResetPasswordScene extends CredentialsBaseScene {
 
     if (loginValue && passwordValue && verifyPasswordValue
       && passwordValue === verifyPasswordValue) {
-      postData('http://localhost:3000/reset-password', {
+      postData(`${SERVER_URL}/reset-password`, {
         token,
         password: passwordValue,
         verifiedPassword: verifyPasswordValue,

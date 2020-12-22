@@ -6,6 +6,7 @@
     "rules": {
         "no-console": "off",
         "no-param-reassign": "off",
-        "no-alert": "off"
+        "no-alert": "off",
+        "no-undef": "off"
     }
 }

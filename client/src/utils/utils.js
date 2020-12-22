@@ -63,7 +63,7 @@ export function getCookie(cname) {
 
 export function refreshTokenInterval() {
   setInterval(() => {
-    postData('http://localhost:3000/token', {
+    postData(`${SERVER_URL}/token`, {
       refreshToken: getCookie('refreshJwt'),
     }).then(() => {})
       .catch((error) => {

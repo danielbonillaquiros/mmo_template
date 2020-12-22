@@ -15,7 +15,7 @@ export default class LoginScene extends CredentialsBaseScene {
     const passwordValue = this.passwordInput.value;
 
     if (loginValue && passwordValue) {
-      postData('http://localhost:3000/login', {
+      postData(`${SERVER_URL}/login`, {
         email: loginValue,
         password: passwordValue,
       }).then((response) => {

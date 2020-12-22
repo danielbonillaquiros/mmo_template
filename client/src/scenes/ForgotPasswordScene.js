@@ -17,7 +17,7 @@ export default class ForgotPasswordScene extends CredentialsBaseScene {
     const loginValue = this.loginInput.value;
 
     if (loginValue) {
-      postData('http://localhost:3000/forgot-password', {
+      postData(`${SERVER_URL}/forgot-password`, {
         email: loginValue,
       }).then((response) => {
         console.log(response.message);
