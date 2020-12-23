@@ -5,8 +5,8 @@ html, body {
 .input-div {
     width: 100%;
     position: fixed;
-    top: 140px;
-    left: 310px;
+    bottom: calc(55%);
+    text-align: center;
 }
 
 .form-label {
@@ -17,4 +17,10 @@ html, body {
 .login-input {
     width: 200px;
     height: 20px;
+}
+
+@media screen and (max-height: 600px) {
+    .input-div {
+        bottom: calc(45%);
+    }
 }

@@ -53,7 +53,6 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   resize(gameSize) {
-    console.log('resize called from title scene');
     const { width, height } = gameSize;
 
     this.cameras.resize(width, height);

@@ -7,13 +7,13 @@ import {
 export default class CredentialsBaseScene extends Phaser.Scene {
   createUi(btn1Text, btn1Target, btn2Text, btn2Target, btn3Text, btn3Target) {
     // create title text
-    this.titleText = this.add.text(this.scale.width / 2, this.scale.height / 8, 'MMORPG', { fontSize: '64px', fill: '#fff' });
+    this.titleText = this.add.text(this.scale.width / 2, this.scale.height * 0.2, 'MMORPG', { fontSize: '64px', fill: '#fff' });
     this.titleText.setOrigin(0.5);
 
     this.button1 = new UiButton(
       this,
       this.scale.width / 2,
-      this.scale.height * 0.60,
+      this.scale.height * 0.7,
       'button1',
       'button2',
       btn1Text,
@@ -23,7 +23,7 @@ export default class CredentialsBaseScene extends Phaser.Scene {
     this.button2 = new UiButton(
       this,
       this.scale.width / 2,
-      this.scale.height * 0.75,
+      this.scale.height * 0.8,
       'button1',
       'button2',
       btn2Text,
@@ -34,7 +34,7 @@ export default class CredentialsBaseScene extends Phaser.Scene {
       this.button3 = new UiButton(
         this,
         this.scale.width / 2,
-        this.scale.height * 0.90,
+        this.scale.height * 0.9,
         'button1',
         'button2',
         btn3Text,
@@ -43,6 +43,11 @@ export default class CredentialsBaseScene extends Phaser.Scene {
     }
 
     this.createInput();
+
+    // handle game resize
+    this.scale.on('resize', this.resize, this);
+    // resize our game
+    this.resize({ height: this.scale.height, width: this.scale.width });
   }
 
   createInput() {
@@ -67,6 +72,41 @@ export default class CredentialsBaseScene extends Phaser.Scene {
   startScene(targetScene) {
     window.history.pushState({}, document.title, '/');
     this.div.parentNode.removeChild(this.div);
+    this.scale.removeListener('resize', this.resize);
     this.scene.start(targetScene);
+  }
+
+  resize(gameSize) {
+    const { width, height } = gameSize;
+
+    this.cameras.resize(width, height);
+    this.titleText.setPosition(width / 2, height / 2);
+    this.button1.setPosition(width / 2, height * 0.65);
+    this.button2.setPosition(width / 2, height * 0.75);
+
+    if (width < 1000) this.titleText.setFontSize('64px');
+    else this.titleText.setFontSize('128px');
+
+    if (height < 700) {
+      this.titleText.setPosition(width / 2, height * 0.2);
+      this.button1.setPosition(width / 2, height * 0.68);
+      this.button1.setScale(0.7);
+      this.button2.setPosition(width / 2, height * 0.79);
+      this.button2.setScale(0.7);
+      if (this.button3) {
+        this.button3.setPosition(width / 2, height * 0.9);
+        this.button3.setScale(0.7);
+      }
+    } else {
+      this.titleText.setPosition(width / 2, height * 0.2);
+      this.button1.setPosition(width / 2, height * 0.7);
+      this.button1.setScale(1);
+      this.button2.setPosition(width / 2, height * 0.8);
+      this.button2.setScale(1);
+      if (this.button3) {
+        this.button3.setPosition(width / 2, height * 0.9);
+        this.button3.setScale(1);
+      }
+    }
   }
 }
