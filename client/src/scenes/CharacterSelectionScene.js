@@ -28,7 +28,7 @@ export default class CharacterSelectionScene extends Phaser.Scene {
 
       for (let i = 0 + (8 * j); i < 8 + (8 * j); i += 1) {
         const character = this.add.image(x, y, 'characters', i).setInteractive();
-        character.setScale(3);
+        character.setScale(2.5);
         character.setAlpha(0.4);
         character.on('pointerover', this.pointerover);
         character.on('pointerout', this.pointerout);
@@ -63,6 +63,39 @@ export default class CharacterSelectionScene extends Phaser.Scene {
 
     if (width < 1000) this.titleText.setFontSize('64px');
     else this.titleText.setFontSize('128px');
+
+    let yDiff = 0;
+    let xDiff = 0;
+    let charactersPerRow = 8;
+    let heightDiff = 6;
+
+    if (width < 1200) {
+      charactersPerRow = 6;
+      heightDiff = 8;
+    }
+
+    if (width < 780) {
+      charactersPerRow = 4;
+      heightDiff = 8;
+    }
+
+    this.group.getChildren().forEach((child, index) => {
+      if (index !== 0) {
+        yDiff = parseInt(index / charactersPerRow, 10);
+        xDiff = index % charactersPerRow;
+      }
+
+      const x = width / 3.5 + (96 * xDiff);
+      const y = height / heightDiff * (yDiff + 2);
+      child.setPosition(x, y);
+
+      if (height < 600) {
+        child.setScale(1.5);
+      } else {
+        child.setScale(2.5);
+      }
+    });
+
     this.titleText.setPosition(width / 2, height * 0.1);
   }
 }

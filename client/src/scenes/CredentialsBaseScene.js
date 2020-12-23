@@ -86,7 +86,6 @@ export default class CredentialsBaseScene extends Phaser.Scene {
 
     if (width < 1000) this.titleText.setFontSize('64px');
     else this.titleText.setFontSize('128px');
-
     this.titleText.setPosition(width / 2, height * 0.1);
 
     if (height < 700) {
