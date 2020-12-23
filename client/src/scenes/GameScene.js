@@ -168,6 +168,11 @@ export default class GameScene extends Phaser.Scene {
 
     // emit event to server that a new player joined
     this.socket.emit('newPlayer', getCookie('jwt'));
+
+    // handle game resize
+    this.scale.on('resize', this.resize, this);
+    // resize our game
+    this.resize({ height: this.scale.height, width: this.scale.width });
   }
 
   update() {
@@ -336,5 +341,11 @@ export default class GameScene extends Phaser.Scene {
   createMap() {
     // create our map
     this.gameMap = new GameMap(this, 'map', 'background', 'background', 'blocked');
+  }
+
+  resize(gameSize) {
+    const { width, height } = gameSize;
+
+    this.cameras.resize(width, height);
   }
 }

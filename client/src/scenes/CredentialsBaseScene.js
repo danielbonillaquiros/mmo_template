@@ -7,7 +7,7 @@ import {
 export default class CredentialsBaseScene extends Phaser.Scene {
   createUi(btn1Text, btn1Target, btn2Text, btn2Target, btn3Text, btn3Target) {
     // create title text
-    this.titleText = this.add.text(this.scale.width / 2, this.scale.height * 0.2, 'MMORPG', { fontSize: '64px', fill: '#fff' });
+    this.titleText = this.add.text(this.scale.width / 2, this.scale.height * 0.1, 'MMORPG', { fontSize: '64px', fill: '#fff' });
     this.titleText.setOrigin(0.5);
 
     this.button1 = new UiButton(
@@ -87,8 +87,9 @@ export default class CredentialsBaseScene extends Phaser.Scene {
     if (width < 1000) this.titleText.setFontSize('64px');
     else this.titleText.setFontSize('128px');
 
+    this.titleText.setPosition(width / 2, height * 0.1);
+
     if (height < 700) {
-      this.titleText.setPosition(width / 2, height * 0.2);
       this.button1.setPosition(width / 2, height * 0.68);
       this.button1.setScale(0.7);
       this.button2.setPosition(width / 2, height * 0.79);
@@ -98,7 +99,6 @@ export default class CredentialsBaseScene extends Phaser.Scene {
         this.button3.setScale(0.7);
       }
     } else {
-      this.titleText.setPosition(width / 2, height * 0.2);
       this.button1.setPosition(width / 2, height * 0.7);
       this.button1.setScale(1);
       this.button2.setPosition(width / 2, height * 0.8);
