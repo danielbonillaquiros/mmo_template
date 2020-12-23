@@ -28,11 +28,12 @@ export default class CharacterSelectionScene extends Phaser.Scene {
 
       for (let i = 0 + (8 * j); i < 8 + (8 * j); i += 1) {
         const character = this.add.image(x, y, 'characters', i).setInteractive();
+        character.characterId = i;
         character.setScale(2.5);
         character.setAlpha(0.4);
         character.on('pointerover', this.pointerover);
         character.on('pointerout', this.pointerout);
-        character.on('pointerdown', this.pointerdown.bind(this));
+        character.on('pointerdown', this.pointerdown.bind(this, character));
         this.group.add(character);
         x += 96;
       }
@@ -47,9 +48,9 @@ export default class CharacterSelectionScene extends Phaser.Scene {
     this.setAlpha(0.4);
   }
 
-  pointerdown() {
+  pointerdown(character) {
     this.scale.removeListener('resize', this.resize);
-    this.scene.start('Game');
+    this.scene.start('Game', { selectedCharacter: character.characterId });
   }
 
   startScene(targetScene) {

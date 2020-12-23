@@ -10,7 +10,7 @@ export default class GameScene extends Phaser.Scene {
     super('Game');
   }
 
-  init() {
+  init(data) {
     this.scene.launch('Ui');
 
     // get a reference to our socket variable
@@ -18,6 +18,8 @@ export default class GameScene extends Phaser.Scene {
 
     // listen for socket events
     this.listenForSocketEvents();
+
+    this.selectedCharacter = data.selectedCharacter || 0;
   }
 
   listenForSocketEvents() {
@@ -27,6 +29,7 @@ export default class GameScene extends Phaser.Scene {
       console.log(players);
       Object.keys(players).forEach((id) => {
         if (players[id].id === this.socket.id) {
+          console.log(players[id]);
           this.createPlayer(players[id], true);
           this.addCollisions();
         } else {
@@ -167,7 +170,7 @@ export default class GameScene extends Phaser.Scene {
     this.createInput();
 
     // emit event to server that a new player joined
-    this.socket.emit('newPlayer', getCookie('jwt'));
+    this.socket.emit('newPlayer', getCookie('jwt'), this.selectedCharacter);
 
     // handle game resize
     this.scale.on('resize', this.resize, this);
@@ -217,7 +220,7 @@ export default class GameScene extends Phaser.Scene {
       playerObject.x * 2,
       playerObject.y * 2,
       'characters',
-      0,
+      playerObject.frame,
       playerObject.health,
       playerObject.maxHealth,
       playerObject.id,

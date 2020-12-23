@@ -64,7 +64,7 @@ export default class GameManager {
         this.io.emit('player_disconnect', socket.id);
       });
 
-      socket.on('newPlayer', (token) => {
+      socket.on('newPlayer', (token, frame) => {
         try {
           // TODO: re-enable logic
           // validate token, if valid send game information, else reject login
@@ -75,7 +75,7 @@ export default class GameManager {
           const name = 'test';
 
           // create a new Player
-          this.spawnPlayer(socket.id, name);
+          this.spawnPlayer(socket.id, name, frame);
 
           // send the players object to the new player
           socket.emit('currentPlayers', this.players);
@@ -241,8 +241,8 @@ export default class GameManager {
     });
   }
 
-  spawnPlayer(playerId, name) {
-    const player = new PlayerModel(playerId, this.playerLocations, this.players, name);
+  spawnPlayer(playerId, name, frame) {
+    const player = new PlayerModel(playerId, this.playerLocations, this.players, name, frame);
     this.players[playerId] = player;
   }
 
