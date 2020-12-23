@@ -3,7 +3,7 @@ import Player from './Player';
 import Direction from '../../utils/direction';
 
 export default class PlayerContainer extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, key, frame, health, maxHealth, id, attackAudio, mainPlayer) {
+  constructor(scene, x, y, key, frame, health, maxHealth, id, attackAudio, mainPlayer, playerName) {
     super(scene, x, y);
     this.scene = scene;
     this.velocity = 160;
@@ -16,6 +16,7 @@ export default class PlayerContainer extends Phaser.GameObjects.Container {
     this.id = id;
     this.attackAudio = attackAudio;
     this.mainPlayer = mainPlayer;
+    this.playerName = playerName;
 
     // set a size on the container
     this.setSize(64, 64);
@@ -45,6 +46,25 @@ export default class PlayerContainer extends Phaser.GameObjects.Container {
 
     // create the player healthbar
     this.createHealthBar();
+
+    // create the player name
+    this.createPlayerName();
+  }
+
+  createPlayerName() {
+    this.playerNameText = this.scene.make.text({
+      x: this.x - 32,
+      y: this.y - 60,
+      text: this.playerName,
+      style: {
+        font: '14px monospace',
+        fill: '#ffffff',
+      },
+    });
+  }
+
+  updatePlayerNamePosition() {
+    this.playerNameText.setPosition(this.x - 32, this.y - 60);
   }
 
   createHealthBar() {
@@ -69,6 +89,7 @@ export default class PlayerContainer extends Phaser.GameObjects.Container {
     this.health = this.playerObject.health;
     this.setposition(playerObject.x, playerObject.y);
     this.updateHealthBar();
+    this.updatePlayerNamePosition();
   }
 
   update(cursors) {
@@ -132,6 +153,7 @@ export default class PlayerContainer extends Phaser.GameObjects.Container {
     }
 
     this.updateHealthBar();
+    this.updatePlayerNamePosition();
   }
 
   updateFlipX() {
@@ -151,6 +173,7 @@ export default class PlayerContainer extends Phaser.GameObjects.Container {
 
   cleanUp() {
     this.healthBar.destroy();
+    this.playerNameText.destroy();
     this.player.destroy();
     this.destroy();
   }

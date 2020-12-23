@@ -223,6 +223,7 @@ export default class GameScene extends Phaser.Scene {
       playerObject.id,
       this.playerAttackAudio,
       mainPlayer,
+      playerObject.playerName,
     );
 
     if (!mainPlayer) {
