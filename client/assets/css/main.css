@@ -24,3 +24,30 @@ html, body {
         bottom: calc(45%);
     }
 }
+
+.chat-input {
+    position: absolute;
+    height: 30px;
+    font-size: 16px;
+    color: black;
+    font-style: italic;
+    bottom: 0px;
+}
+
+.chat-invisible {
+    opacity: 0;
+}
+
+.chat-visible {
+    opacity: 0.4;
+}
+
+.chat-bottom {
+    left: 0px;
+    width: 100%;
+}
+
+.chat-sidebar {
+    right: 0px;
+    width: 300px;
+}

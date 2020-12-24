@@ -1,3 +1,5 @@
+import { createInputField } from '../utils/utils';
+
 export default class DialogWindow {
   constructor(scene, opts) {
     if (!opts) opts = {};
@@ -28,12 +30,9 @@ export default class DialogWindow {
 
     this.graphics = this.scene.add.graphics();
     this.graphics.setDepth(2);
+    this.createInput();
     this.createWindow();
     this.makeInteractive();
-
-    setInterval(() => {
-      this.addNewMessage({ name: 'test', message: Date.now() });
-    }, 500);
   }
 
   createWindow() {
@@ -179,5 +178,17 @@ export default class DialogWindow {
     }
 
     this.redrawWindow();
+  }
+
+  createInput() {
+    this.input = createInputField('text', 'chatInput', 'chatInput', 'chat-input chat-invisible');
+
+    if (this.x < 560) {
+      this.input.classList.add('chat-bottom');
+    } else {
+      this.input.classList.add('chat-sidebar');
+    }
+
+    document.body.appendChild(this.input);
   }
 }
