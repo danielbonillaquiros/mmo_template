@@ -182,6 +182,35 @@ export default class GameScene extends Phaser.Scene {
     this.scale.on('resize', this.resize, this);
     // resize our game
     this.resize({ height: this.scale.height, width: this.scale.width });
+
+    // add keydown event listener
+    this.keyDownEventListener();
+
+    // remove focus from chat input field
+    this.input.on('pointerdown', () => {
+      document.getElementById('chatInput').blur();
+    });
+  }
+
+  keyDownEventListener() {
+    this.inputMessageField = document.getElementById('chatInput');
+
+    window.addEventListener('keydown', (event) => {
+      if (event.which === 13) {
+        // enter key was pressed
+        this.sendMessage();
+      } else if (event.which === 32) {
+        // space key was pressed
+        this.sendMessage();
+        if (document.activeElement === this.inputMessageField) {
+          this.inputMessageField.value = `${this.inputMessageField.value} `;
+        }
+      }
+    });
+  }
+
+  sendMessage() {
+    console.log('send message');
   }
 
   update() {

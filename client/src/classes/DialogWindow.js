@@ -102,6 +102,9 @@ export default class DialogWindow {
     this.rect.setInteractive();
 
     this.rect.on('pointerover', () => {
+      this.input.classList.add('chat-visible');
+      this.input.classList.remove('chat-invisible');
+
       this.windowAlpha = 1;
       this.borderAlpha = 1;
       this.textAlpha = 1;
@@ -109,6 +112,9 @@ export default class DialogWindow {
     });
 
     this.rect.on('pointerout', () => {
+      this.input.classList.add('chat-invisible');
+      this.input.classList.remove('chat-visible');
+
       this.windowAlpha = 0.4;
       this.borderAlpha = 0.3;
       this.textAlpha = 0.2;
@@ -168,10 +174,16 @@ export default class DialogWindow {
     this.x = gameSize.width;
 
     if (gameSize.width < 560) {
+      this.input.classList.add('chat-bottom');
+      this.input.classList.remove('chat-sidebar');
+
       this.windowWidth = gameSize.width;
       this.windowHeight = 200;
       this.y = gameSize.height - this.windowHeight;
     } else {
+      this.input.classList.add('chat-sidebar');
+      this.input.classList.remove('chat-bottom');
+
       this.windowWidth = 305;
       this.windowHeight = gameSize.height;
       this.y = 0;
