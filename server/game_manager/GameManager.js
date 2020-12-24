@@ -67,13 +67,11 @@ export default class GameManager {
 
       socket.on('newPlayer', (token, frame) => {
         try {
-          // TODO: re-enable logic
           // validate token, if valid send game information, else reject login
-          // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
           // get player's name
-          // const { name } = decoded.user;
-          const name = 'test';
+          const { name } = decoded.user;
 
           // create a new Player
           this.spawnPlayer(socket.id, name, frame);
@@ -97,14 +95,11 @@ export default class GameManager {
 
       socket.on('send-message', async (message, token) => {
         try {
-          // TODO: re-enable logic
           // validate token, if valid send game information, else reject login
-          // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
           // get player's name
-          // const { name, email } = decoded.user;
-          const name = 'test';
-          const email = 'test@test.com';
+          const { name, email } = decoded.user;
 
           // store the message in the database
           await ChatModel.create({ email, message });

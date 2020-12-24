@@ -155,9 +155,8 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.on('invalidToken', () => {
-      // TODO: re-enable logic
-      // window.alert('Token is no longer valid. Please login again.');
-      // window.location.reload();
+      window.alert('Token is no longer valid. Please login again.');
+      window.location.reload();
     });
 
     this.socket.on('new-message', (messageObject) => {
