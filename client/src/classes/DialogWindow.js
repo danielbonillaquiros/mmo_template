@@ -164,4 +164,20 @@ export default class DialogWindow {
       });
     }
   }
+
+  resize(gameSize) {
+    this.x = gameSize.width;
+
+    if (gameSize.width < 560) {
+      this.windowWidth = gameSize.width;
+      this.windowHeight = 200;
+      this.y = gameSize.height - this.windowHeight;
+    } else {
+      this.windowWidth = 305;
+      this.windowHeight = gameSize.height;
+      this.y = 0;
+    }
+
+    this.redrawWindow();
+  }
 }

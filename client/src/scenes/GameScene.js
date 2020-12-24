@@ -359,5 +359,6 @@ export default class GameScene extends Phaser.Scene {
     const { width, height } = gameSize;
 
     this.cameras.resize(width, height);
+    this.dialogWindow.resize(gameSize);
   }
 }
