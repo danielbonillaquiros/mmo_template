@@ -4,6 +4,7 @@ import Chest from '../classes/Chest';
 import Monster from '../classes/Monster';
 import GameMap from '../classes/GameMap';
 import { getCookie } from '../utils/utils';
+import DialogWindow from '../classes/DialogWindow';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -169,6 +170,11 @@ export default class GameScene extends Phaser.Scene {
     this.createGroups();
     this.createInput();
 
+    // create dialog
+    this.dialogWindow = new DialogWindow(this, {
+      x: this.scale.width,
+    });
+
     // emit event to server that a new player joined
     this.socket.emit('newPlayer', getCookie('jwt'), this.selectedCharacter);
 
@@ -179,6 +185,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update() {
+    this.dialogWindow.update();
+
     if (this.player) this.player.update(this.cursors);
 
     if (this.player) {
