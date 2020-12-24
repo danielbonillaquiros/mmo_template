@@ -28,8 +28,8 @@ export default class DialogWindow {
 
   createWindow() {
     const windowDimensions = this.calculateWindowDimensions();
-    this.createOuterWindow();
-    this.createInnerWindow();
+    this.createOuterWindow(windowDimensions);
+    this.createInnerWindow(windowDimensions);
   }
 
   calculateWindowDimensions() {
@@ -45,14 +45,19 @@ export default class DialogWindow {
     };
   }
 
-  createOuterWindow({ x, y, rectWidth, rectHeight }) {
+  createOuterWindow({
+    x, y, rectWidth, rectHeight,
+  }) {
     this.graphics.lineStyle(this.borderThickness, this.borderColor, this.borderAlpha);
     this.graphics.strokeRect(x, y, rectWidth, rectHeight);
-
   }
 
-  createInnerWindow({ x, y, rectWidth, rectHeight }) {
-
+  createInnerWindow({
+    x, y, rectWidth, rectHeight,
+  }) {
+    return {
+      x, y, rectWidth, rectHeight,
+    };
   }
 
   update() {
