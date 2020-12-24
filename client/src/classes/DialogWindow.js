@@ -32,7 +32,7 @@ export default class DialogWindow {
     this.makeInteractive();
 
     setInterval(() => {
-      this.addNewMessage({ name: 'test', message: 'test' });
+      this.addNewMessage({ name: 'test', message: Date.now() });
     }, 500);
   }
 
@@ -142,5 +142,26 @@ export default class DialogWindow {
     this.dialogContainer.add(messageText);
     this.messageCount += 1;
     this.messagesHeight += messageText.height;
+
+    // stop the message list from going off screen
+    if (this.messagesHeight > (windowDimensions.rectHeight - 60)) {
+      // reset messages height
+      this.messagesHeight = 0;
+      // remove the first dialog item from the array
+      this.messages.shift();
+      // loop through the message group and update the text of each item
+      this.messageGroup.getChildren().forEach((child, index) => {
+        if (index > this.messages.length - 1) {
+          child.setActive(false);
+          child.setVisible(false);
+        } else {
+          child.setText(`${this.messages[index].name}: ${this.messages[index].message}`);
+          child.setY(this.messagesHeight);
+          child.setActive(true);
+          child.setVisible(true);
+          this.messagesHeight += child.height;
+        }
+      });
+    }
   }
 }
