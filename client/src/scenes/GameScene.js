@@ -26,11 +26,8 @@ export default class GameScene extends Phaser.Scene {
   listenForSocketEvents() {
     // spawn player game objects
     this.socket.on('currentPlayers', (players) => {
-      console.log('currentPlayers');
-      console.log(players);
       Object.keys(players).forEach((id) => {
         if (players[id].id === this.socket.id) {
-          console.log(players[id]);
           this.createPlayer(players[id], true);
           this.addCollisions();
         } else {
@@ -162,6 +159,10 @@ export default class GameScene extends Phaser.Scene {
       // window.alert('Token is no longer valid. Please login again.');
       // window.location.reload();
     });
+
+    this.socket.on('new-message', (messageObject) => {
+      this.dialogWindow.addNewMessage(messageObject);
+    });
   }
 
   create() {
@@ -201,7 +202,6 @@ export default class GameScene extends Phaser.Scene {
         this.sendMessage();
       } else if (event.which === 32) {
         // space key was pressed
-        this.sendMessage();
         if (document.activeElement === this.inputMessageField) {
           this.inputMessageField.value = `${this.inputMessageField.value} `;
         }
@@ -210,7 +210,13 @@ export default class GameScene extends Phaser.Scene {
   }
 
   sendMessage() {
-    console.log('send message');
+    if (this.inputMessageField) {
+      const message = this.inputMessageField.value;
+      if (message) {
+        this.inputMessageField.value = '';
+        this.socket.emit('send-message', message, getCookie('jwt'));
+      }
+    }
   }
 
   update() {

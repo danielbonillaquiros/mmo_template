@@ -3,6 +3,7 @@ import PlayerModel from './PlayerModel';
 import * as levelData from '../public/assets/level/large_level.json';
 import Spawner from './Spawner';
 import { SpawnerType } from './utils';
+import ChatModel from '../models/ChatModel';
 
 export default class GameManager {
   constructor(io) {
@@ -88,6 +89,32 @@ export default class GameManager {
 
           // inform the other players of the new player that joined
           socket.broadcast.emit('spawnPlayer', this.players[socket.id]);
+        } catch (error) {
+          console.log(error.message);
+          socket.emit('invalidToken');
+        }
+      });
+
+      socket.on('send-message', async (message, token) => {
+        try {
+          // TODO: re-enable logic
+          // validate token, if valid send game information, else reject login
+          // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+          // get player's name
+          // const { name, email } = decoded.user;
+          const name = 'test';
+          const email = 'test@test.com';
+
+          // store the message in the database
+          await ChatModel.create({ email, message });
+
+          // emit the message to all players
+          this.io.emit('new-message', {
+            message,
+            name,
+            frame: this.players[socket.id].frame,
+          })
         } catch (error) {
           console.log(error.message);
           socket.emit('invalidToken');
