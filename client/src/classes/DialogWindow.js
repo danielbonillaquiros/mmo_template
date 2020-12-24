@@ -24,6 +24,7 @@ export default class DialogWindow {
     this.graphics = this.scene.add.graphics();
     this.graphics.setDepth(2);
     this.createWindow();
+    this.makeInteractive();
   }
 
   createWindow() {
@@ -55,9 +56,17 @@ export default class DialogWindow {
   createInnerWindow({
     x, y, rectWidth, rectHeight,
   }) {
-    return {
-      x, y, rectWidth, rectHeight,
-    };
+    this.graphics.fillStyle(this.windowColor, this.windowAlpha);
+    this.graphics.fillRect(x + 1, y + 1, rectWidth - 1, rectHeight - 1);
+
+    if (this.rect) {
+      this.rect.setPosition(x + 1, y + 1);
+      this.rect.setDisplaySize(rectWidth - 1, rectHeight - 1);
+    } else {
+      this.rect = this.scene.add.rectangle(x + 1, y + 1, rectWidth - 1, rectHeight - 1);
+      if (this.debug) this.rect.setFillStyle(0x6666ff);
+      this.rect.setOrigin(0, 0);
+    }
   }
 
   update() {
@@ -70,5 +79,23 @@ export default class DialogWindow {
   redrawWindow() {
     this.graphics.clear();
     this.createWindow();
+  }
+
+  makeInteractive() {
+    this.rect.setInteractive();
+
+    this.rect.on('pointerover', () => {
+      this.windowAlpha = 1;
+      this.borderAlpha = 1;
+      this.textAlpha = 1;
+      this.redrawWindow();
+    });
+
+    this.rect.on('pointerout', () => {
+      this.windowAlpha = 0.4;
+      this.borderAlpha = 0.3;
+      this.textAlpha = 0.2;
+      this.redrawWindow();
+    });
   }
 }
