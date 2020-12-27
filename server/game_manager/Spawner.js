@@ -50,8 +50,8 @@ export default class Spawner {
       randomNumber(10, 20),
       this.id,
       randomNumber(0, 20),
-      randomNumber(3, 5),
-      1,
+      randomNumber(100, 150),
+      randomNumber(10, 20),
     );
     this.objectsCreated.push(monster);
     this.addObject(monster.id, monster);

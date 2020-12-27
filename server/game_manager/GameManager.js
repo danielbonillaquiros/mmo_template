@@ -156,9 +156,10 @@ export default class GameManager {
         // update the spawner
         if (this.monsters[monsterId]) {
           const { gold, attack } = this.monsters[monsterId];
+          const playerAttackValue = this.players[socket.id].attack;
 
           // subtract health from monster model
-          this.monsters[monsterId].loseHealth();
+          this.monsters[monsterId].loseHealth(playerAttackValue);
 
           // check the monster's health, if dead, remove it
           if (this.monsters[monsterId].health <= 0) {
@@ -171,11 +172,11 @@ export default class GameManager {
             this.io.emit('monsterRemoved', monsterId);
 
             // add bonus health to the player
-            this.players[socket.id].updateHealth(2);
+            this.players[socket.id].updateHealth(15);
             this.io.emit('updatePlayerHealth', socket.id, this.players[socket.id].health);
           } else {
             // update the player's health
-            this.players[socket.id].updateHealth(-attack);
+            this.players[socket.id].playerAttacked(attack);
             this.io.emit('updatePlayerHealth', socket.id, this.players[socket.id].health);
 
             // update the monster's health
@@ -199,9 +200,10 @@ export default class GameManager {
         if (this.players[attackedPlayerId]) {
           // get required info from attacked player
           const { gold } = this.players[attackedPlayerId];
+          const playerAttackValue = this.players[socket.id].attack;
 
           // subtract health from attacked player
-          this.players[attackedPlayerId].updateHealth(-1);
+          this.players[attackedPlayerId].playerAttacked(playerAttackValue);
 
           // check attacked player's health, if dead send gold to other player
           if (this.players[attackedPlayerId].health <= 0) {
@@ -220,7 +222,7 @@ export default class GameManager {
             this.io.to(`${attackedPlayerId}`).emit('updateScore', this.players[attackedPlayerId].gold);
 
             // add bonus health to the player
-            this.players[socket.id].updateHealth(2);
+            this.players[socket.id].updateHealth(15);
             this.io.emit('updatePlayerHealth', socket.id, this.players[socket.id].health);
           } else {
             this.io.emit('updatePlayerHealth', attackedPlayerId, this.players[attackedPlayerId].health);
