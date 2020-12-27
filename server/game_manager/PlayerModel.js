@@ -11,9 +11,26 @@ export default class PlayerModel {
     this.spawnLocations = spawnLocations;
     this.playerName = name;
     this.frame = frame;
+    this.playerItems = {};
+    this.maxNumberOfItems = 5;
 
     const location = this.generateLocation(players);
     [this.x, this.y] = location;
+  }
+
+  canPickupItem() {
+    if (Object.keys(this.playerItems).length < this.maxNumberOfItems) {
+      return true;
+    }
+    return false;
+  }
+
+  addItem(item) {
+    this.playerItems[item.id] = item;
+  }
+
+  removeItem(item) {
+    delete this.playerItems[item.id];
   }
 
   playerAttacked(attack) {

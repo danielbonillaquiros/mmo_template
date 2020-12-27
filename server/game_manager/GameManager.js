@@ -5,6 +5,7 @@ import * as levelData from '../public/assets/level/large_level.json';
 import Spawner from './Spawner';
 import { SpawnerType } from './utils';
 import ChatModel from '../models/ChatModel';
+import * as itemData from '../public/assets/level/tools.json';
 
 export default class GameManager {
   constructor(io) {
@@ -13,10 +14,12 @@ export default class GameManager {
     this.chests = {};
     this.monsters = {};
     this.players = {};
+    this.items = {};
 
     this.playerLocations = [];
     this.chestLocations = {};
     this.monsterLocations = {};
+    this.itemLocations = itemData.locations;
   }
 
   setup() {
@@ -280,30 +283,36 @@ export default class GameManager {
   }
 
   addChest(chestId, chest) {
-    // console.log('addChest', chestId);
     this.chests[chestId] = chest;
     this.io.emit('chestSpawned', chest);
   }
 
   deleteChest(chestId) {
-    // console.log('deleteChest', chestId);
     delete this.chests[chestId];
     this.io.emit('chestRemoved', chestId);
   }
 
   addMonster(monsterId, monster) {
-    // console.log('addMonster', monsterId);
     this.monsters[monsterId] = monster;
     this.io.emit('monsterSpawned', monster);
   }
 
   deleteMonster(monsterId) {
-    // console.log('deleteMonster', monsterId);
     delete this.monsters[monsterId];
     this.io.emit('monsterRemoved', monsterId);
   }
 
   moveMonsters() {
     this.io.emit('monsterMovement', this.monsters);
+  }
+
+  addItem(itemId, item) {
+    this.items[itemId] = item;
+    this.io.emit('itemSpawned', item);
+  }
+
+  deleteItem(itemId) {
+    delete this.items[itemId];
+    this.io.emit('itemRemoved', itemId);
   }
 }
