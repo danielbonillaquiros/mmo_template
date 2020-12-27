@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import PlayerModel from './PlayerModel';
 import * as levelData from '../public/assets/level/large_level.json';
@@ -67,11 +68,14 @@ export default class GameManager {
 
       socket.on('newPlayer', (token, frame) => {
         try {
-          // validate token, if valid send game information, else reject login
-          const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          let name = v4();
+          if (process.env.BYPASS_AUTH !== 'ENABLED') {
+            // validate token, if valid send game information, else reject login
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-          // get player's name
-          const { name } = decoded.user;
+            // get player's name
+            ({ name } = decoded.user);
+          }
 
           // create a new Player
           this.spawnPlayer(socket.id, name, frame);
@@ -95,21 +99,26 @@ export default class GameManager {
 
       socket.on('send-message', async (message, token) => {
         try {
-          // validate token, if valid send game information, else reject login
-          const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          let name = v4();
+          let email = '';
 
-          // get player's name
-          const { name, email } = decoded.user;
+          if (process.env.BYPASS_AUTH !== 'ENABLED') {
+            // validate token, if valid send game information, else reject login
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-          // store the message in the database
-          await ChatModel.create({ email, message });
+            // get player's name
+            ({ name, email } = decoded.user);
+
+            // store the message in the database
+            await ChatModel.create({ email, message });
+          }
 
           // emit the message to all players
           this.io.emit('new-message', {
             message,
             name,
             frame: this.players[socket.id].frame,
-          })
+          });
         } catch (error) {
           console.log(error.message);
           socket.emit('invalidToken');
