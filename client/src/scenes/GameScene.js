@@ -164,6 +164,14 @@ export default class GameScene extends Phaser.Scene {
     this.socket.on('new-message', (messageObject) => {
       this.dialogWindow.addNewMessage(messageObject);
     });
+
+    this.socket.on('current-items', (items) => {
+      console.log(items);
+    });
+
+    this.socket.on('item-spawned', (item) => {
+      console.log(item);
+    });
   }
 
   create() {

@@ -92,6 +92,9 @@ export default class GameManager {
           // send the chests object to the new player
           socket.emit('currentChests', this.chests);
 
+          // send the items object to the new player
+          socket.emit('current-items', this.items);
+
           // inform the other players of the new player that joined
           socket.broadcast.emit('spawnPlayer', this.players[socket.id]);
         } catch (error) {
@@ -275,6 +278,17 @@ export default class GameManager {
       );
       this.spawners[spawner.id] = spawner;
     });
+
+    // create item spawner
+    config.id = 'item';
+    config.spawnerType = SpawnerType.ITEM;
+    spawner = new Spawner(
+      config,
+      this.itemLocations,
+      this.addItem.bind(this),
+      this.deleteItem.bind(this),
+    );
+    this.spawners[spawner.id] = spawner;
   }
 
   spawnPlayer(playerId, name, frame) {
@@ -308,11 +322,11 @@ export default class GameManager {
 
   addItem(itemId, item) {
     this.items[itemId] = item;
-    this.io.emit('itemSpawned', item);
+    this.io.emit('item-spawned', item);
   }
 
   deleteItem(itemId) {
     delete this.items[itemId];
-    this.io.emit('itemRemoved', itemId);
+    this.io.emit('item-removed', itemId);
   }
 }
