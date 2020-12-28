@@ -12,7 +12,7 @@ export default class ModalWindow {
       textAlpha = 0.2,
       windowColor = 0x303030,
       windowWidth = 305,
-      windowHeight = this.scene.scale.height,
+      windowHeight = scene.scale.height,
     } = opts;
 
     this.scene = scene;
