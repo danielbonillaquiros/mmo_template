@@ -182,6 +182,7 @@ export default class InventoryWindow extends ModalWindow {
 
   hideWindow() {
     this.rect.disableInteractive();
+    this.inventoryContainer.setAlpha(0);
     this.graphics.setAlpha(0);
   }
 
@@ -189,6 +190,38 @@ export default class InventoryWindow extends ModalWindow {
     this.mainPlayer = mainPlayer;
     this.playerObject = playerObject;
     this.rect.setInteractive();
+    this.inventoryContainer.setAlpha(1);
     this.graphics.setAlpha(1);
+
+    // update player stats
+    this.swordStatText.setText(playerObject.attackValue);
+    this.shieldStatText.setText(playerObject.defenseValue);
+    this.goldStatText.setText(playerObject.gold);
+
+    // hide inventory items that are not needed
+    for (let i = Object.keys(playerObject.items).length; i < 5; i += 1) {
+      this.hideInventoryItem(i);
+    }
+
+    // populate inventory items
+    for (let i = 0; i < Object.keys(playerObject.items).length; i += 1) {
+      this.updateInventoryItem(playerObject.items[i], i);
+    }
+  }
+
+  hideInventoryItem(itemNumber) {
+    this.inventoryItems[itemNumber].item.setAlpha(0);
+    this.inventoryItems[itemNumber].discardButton.setAlpha(0);
+    this.inventoryItems[itemNumber].itemName.setAlpha(0);
+    this.inventoryItems[itemNumber].attackIcon.setAlpha(0);
+    this.inventoryItems[itemNumber].attackIconText.setAlpha(0);
+    this.inventoryItems[itemNumber].defenseIcon.setAlpha(0);
+    this.inventoryItems[itemNumber].defenseIconText.setAlpha(0);
+    this.inventoryItems[itemNumber].healthIcon.setAlpha(0);
+    this.inventoryItems[itemNumber].healthIconText.setAlpha(0);
+  }
+
+  updateInventoryItem(item, itemNumber) {
+
   }
 }
