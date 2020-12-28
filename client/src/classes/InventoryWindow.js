@@ -139,7 +139,7 @@ export default class InventoryWindow extends ModalWindow {
       const yPos = 0 + 55 * x;
       // create inventory item icon
       this.inventoryItems[x] = {};
-      this.inventoryItems[x].item = this.scene.add.image(0, yPos, 'inventorySword').setScale(1.5);
+      this.inventoryItems[x].item = this.scene.add.image(0, yPos, 'tools', 0).setScale(1.5);
       this.itemsContainer.add(this.inventoryItems[x].item);
 
       // create discard item button
@@ -204,8 +204,9 @@ export default class InventoryWindow extends ModalWindow {
     }
 
     // populate inventory items
-    for (let i = 0; i < Object.keys(playerObject.items).length; i += 1) {
-      this.updateInventoryItem(playerObject.items[i], i);
+    const keys = Object.keys(playerObject.items);
+    for (let i = 0; i < keys.length; i += 1) {
+      this.updateInventoryItem(playerObject.items[keys[i]], i);
     }
   }
 
@@ -221,7 +222,48 @@ export default class InventoryWindow extends ModalWindow {
     this.inventoryItems[itemNumber].healthIconText.setAlpha(0);
   }
 
-  updateInventoryItem(item, itemNumber) {
+  showInventoryItem(itemNumber) {
+    this.inventoryItems[itemNumber].item.setAlpha(1);
+    this.inventoryItems[itemNumber].itemName.setAlpha(1);
+    this.inventoryItems[itemNumber].attackIcon.setAlpha(1);
+    this.inventoryItems[itemNumber].attackIconText.setAlpha(1);
+    this.inventoryItems[itemNumber].defenseIcon.setAlpha(1);
+    this.inventoryItems[itemNumber].defenseIconText.setAlpha(1);
+    this.inventoryItems[itemNumber].healthIcon.setAlpha(1);
+    this.inventoryItems[itemNumber].healthIconText.setAlpha(1);
 
+    if (this.mainPlayer) {
+      this.inventoryItems[itemNumber].discardButton.setAlpha(1);
+    } else {
+      this.inventoryItems[itemNumber].discardButton.setAlpha(0);
+    }
+  }
+
+  updateInventoryItem(item, itemNumber) {
+    this.inventoryItems[itemNumber].item.setFrame(item.frame);
+    this.inventoryItems[itemNumber].itemName.setText(item.name);
+    this.inventoryItems[itemNumber].attackIconText.setText(item.attackBonus);
+    this.inventoryItems[itemNumber].defenseIconText.setText(item.defenseBonus);
+    this.inventoryItems[itemNumber].healthIconText.setText(item.healthBonus);
+
+    if (item.attackBonus > 0) {
+      this.inventoryItems[itemNumber].attackIconText.setFill('#00ff00');
+    } else {
+      this.inventoryItems[itemNumber].attackIconText.setFill('#ff0000');
+    }
+
+    if (item.defenseBonus > 0) {
+      this.inventoryItems[itemNumber].defenseIconText.setFill('#00ff00');
+    } else {
+      this.inventoryItems[itemNumber].defenseIconText.setFill('#ff0000');
+    }
+
+    if (item.healthBonus > 0) {
+      this.inventoryItems[itemNumber].healthIconText.setFill('#00ff00');
+    } else {
+      this.inventoryItems[itemNumber].healthIconText.setFill('#ff0000');
+    }
+
+    this.showInventoryItem(itemNumber);
   }
 }
