@@ -50,4 +50,18 @@ export default class ModalWindow {
     this.graphics.clear();
     this.createWindow();
   }
+
+  createWindow() {
+    const windowDimensions = this.calculateWindowDimensions();
+    this.createOuterWindow(windowDimensions);
+    this.createInnerWindow(windowDimensions);
+    this.createInnerWindowRectangle(windowDimensions);
+  }
+
+  update() {
+    // update the dialog window if the main world view has changed
+    if (this.scene.cameras.main.worldView.x > 0 || this.scene.cameras.main.worldView.y > 0) {
+      this.redrawWindow();
+    }
+  }
 }

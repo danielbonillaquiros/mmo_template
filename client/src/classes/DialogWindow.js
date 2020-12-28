@@ -16,13 +16,6 @@ export default class DialogWindow extends ModalWindow {
     this.makeInteractive();
   }
 
-  createWindow() {
-    const windowDimensions = this.calculateWindowDimensions();
-    this.createOuterWindow(windowDimensions);
-    this.createInnerWindow(windowDimensions);
-    this.createInnerWindowRectangle(windowDimensions);
-  }
-
   calculateWindowDimensions() {
     const x = this.x - this.windowWidth - 2 + this.scene.cameras.main.worldView.x;
     const y = this.y + 2 + this.scene.cameras.main.worldView.y;
@@ -55,13 +48,6 @@ export default class DialogWindow extends ModalWindow {
       this.dialogContainer = this.scene.add.container(x + 1, y + 1);
       this.dialogContainer.setDepth(3);
       this.dialogContainer.setAlpha(this.textAlpha);
-    }
-  }
-
-  update() {
-    // update the dialog window if the main world view has changed
-    if (this.scene.cameras.main.worldView.x > 0 || this.scene.cameras.main.worldView.y > 0) {
-      this.redrawWindow();
     }
   }
 
