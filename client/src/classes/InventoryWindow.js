@@ -44,6 +44,7 @@ export default class InventoryWindow extends ModalWindow {
 
       // center the title text
       this.titleText.setPosition(this.inventoryContainer.width / 2, 20);
+      this.itemsText.setPosition(this.inventoryContainer.width / 2, 140);
 
       // update inventory container positions
       this.updateInventoryContainerPositions();
@@ -106,10 +107,65 @@ export default class InventoryWindow extends ModalWindow {
     this.shieldStatText.x = this.inventoryContainer.width * 0.5 + 30;
     this.goldIcon.x = this.inventoryContainer.width * 0.85;
     this.goldStatText.x = this.inventoryContainer.width * 0.85 + 30;
+
+    for (let x = 0; x < 5; x += 1) {
+      this.inventoryItems[x].item.x = this.inventoryContainer.width * 0.1;
+      this.inventoryItems[x].discardButton.x = this.inventoryContainer.width;
+      this.inventoryItems[x].itemName.x = this.inventoryContainer.width * 0.18;
+      this.inventoryItems[x].attackIcon.x = this.inventoryContainer.width * 0.5;
+      this.inventoryItems[x].defenseIcon.x = this.inventoryContainer.width * 0.65;
+      this.inventoryItems[x].healthIcon.x = this.inventoryContainer.width * 0.8;
+      this.inventoryItems[x].attackIconText.x = this.inventoryContainer.width * 0.5 + 15;
+      this.inventoryItems[x].defenseIconText.x = this.inventoryContainer.width * 0.65 + 15;
+      this.inventoryItems[x].healthIconText.x = this.inventoryContainer.width * 0.8 + 15;
+    }
   }
 
   createInventorySlots() {
+    // create items title
+    this.itemsText = this.scene.add.text(this.inventoryContainer.width / 2, 140, 'Player Inventory', { fontSize: '22px', fill: '#ffffff', align: 'center' });
+    this.itemsText.setOrigin(0.5);
+    this.inventoryContainer.add(this.itemsText);
 
+    // create container
+    this.itemsContainer = this.scene.add.container(0, 120);
+    this.statsContainer.add(this.itemsContainer);
+
+    this.createInventoryItems();
+  }
+
+  createInventoryItems() {
+    for (let x = 0; x < 5; x += 1) {
+      const yPos = 0 + 55 * x;
+      // create inventory item icon
+      this.inventoryItems[x] = {};
+      this.inventoryItems[x].item = this.scene.add.image(0, yPos, 'inventorySword').setScale(1.5);
+      this.itemsContainer.add(this.inventoryItems[x].item);
+
+      // create discard item button
+      this.inventoryItems[x].discardButton = this.scene.add.image(0, yPos, 'inventoryRemove').setScale(0.75).setInteractive();
+      this.itemsContainer.add(this.inventoryItems[x].discardButton);
+
+      // create item name text
+      this.inventoryItems[x].itemName = this.scene.add.text(0, yPos - 10, 'Item 1 Name', { fontSize: '14px', fill: '#ffffff' });
+      this.itemsContainer.add(this.inventoryItems[x].itemName);
+
+      // create item stats icon
+      this.inventoryItems[x].attackIcon = this.scene.add.image(0, yPos, 'inventorySword').setScale(0.75);
+      this.inventoryItems[x].defenseIcon = this.scene.add.image(0, yPos, 'inventoryShield').setScale(0.75);
+      this.inventoryItems[x].healthIcon = this.scene.add.image(0, yPos, 'inventoryHeart').setScale(0.75);
+      this.itemsContainer.add(this.inventoryItems[x].attackIcon);
+      this.itemsContainer.add(this.inventoryItems[x].defenseIcon);
+      this.itemsContainer.add(this.inventoryItems[x].healthIcon);
+
+      // create item stats text
+      this.inventoryItems[x].attackIconText = this.scene.add.text(0, yPos - 10, '5', { fontSize: '14px', fill: '#00ff00' });
+      this.inventoryItems[x].defenseIconText = this.scene.add.text(0, yPos - 10, '10', { fontSize: '14px', fill: '#00ff00' });
+      this.inventoryItems[x].healthIconText = this.scene.add.text(0, yPos - 10, '-5', { fontSize: '14px', fill: '#ff0000' });
+      this.itemsContainer.add(this.inventoryItems[x].attackIconText);
+      this.itemsContainer.add(this.inventoryItems[x].defenseIconText);
+      this.itemsContainer.add(this.inventoryItems[x].healthIconText);
+    }
   }
 
   resize(gameSize) {
