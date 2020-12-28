@@ -44,6 +44,9 @@ export default class InventoryWindow extends ModalWindow {
 
       // center the title text
       this.titleText.setPosition(this.inventoryContainer.width / 2, 20);
+
+      // update inventory container positions
+      this.updateInventoryContainerPositions();
     } else {
       this.rect = this.scene.add.rectangle(x + 1, y + 1, rectWidth - 1, rectHeight - 1);
       if (this.debug) this.rect.setFillStyle(0x6666ff);
@@ -55,7 +58,7 @@ export default class InventoryWindow extends ModalWindow {
       this.inventoryContainer.setAlpha(this.textAlpha);
 
       // create inventory title
-      this.titleText = this.scene.add.text(this.inventoryContainer.width / 2, 20, 'Player Stats', { fontSize: '22px', fill: '#fff', align: 'center' });
+      this.titleText = this.scene.add.text(this.inventoryContainer.width / 2, 20, 'Player Stats', { fontSize: '22px', fill: '#ffffff', align: 'center' });
       this.titleText.setOrigin(0.5);
       this.inventoryContainer.add(this.titleText);
 
@@ -68,7 +71,41 @@ export default class InventoryWindow extends ModalWindow {
   }
 
   createInventoryStats() {
+    this.statsContainer = this.scene.add.container(0, 80);
+    this.inventoryContainer.add(this.statsContainer);
 
+    const textOptions = {
+      fontSize: '22px',
+      fill: '#ffffff',
+    };
+
+    // create attack stat information
+    this.swordIcon = this.scene.add.image(0, 0, 'inventorySword').setScale(1.5);
+    this.statsContainer.add(this.swordIcon);
+    this.swordStatText = this.scene.add.text(0, 0, '100', textOptions);
+    this.statsContainer.add(this.swordStatText);
+
+    // create defense stat information
+    this.shieldIcon = this.scene.add.image(90, 0, 'inventoryShield').setScale(1.5);
+    this.statsContainer.add(this.shieldIcon);
+    this.shieldStatText = this.scene.add.text(90, 0, '100', textOptions);
+    this.statsContainer.add(this.shieldStatText);
+
+    // create gold stat information
+    this.goldIcon = this.scene.add.image(180, 0, 'inventoryGold').setScale(1.5);
+    this.statsContainer.add(this.goldIcon);
+    this.goldStatText = this.scene.add.text(180, 0, '100', textOptions);
+    this.statsContainer.add(this.goldStatText);
+  }
+
+  updateInventoryContainerPositions() {
+    this.inventoryContainer.setSize(this.inventoryContainer.width - 40, 80);
+    this.swordIcon.x = this.inventoryContainer.width * 0.1;
+    this.swordStatText.x = this.inventoryContainer.width * 0.1 + 30;
+    this.shieldIcon.x = this.inventoryContainer.width * 0.5;
+    this.shieldStatText.x = this.inventoryContainer.width * 0.5 + 30;
+    this.goldIcon.x = this.inventoryContainer.width * 0.85;
+    this.goldStatText.x = this.inventoryContainer.width * 0.85 + 30;
   }
 
   createInventorySlots() {
