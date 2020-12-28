@@ -177,11 +177,31 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.on('update-items', (playerObject) => {
-      console.log(playerObject);
+      this.player.items = playerObject.items;
+      this.player.maxHealth = playerObject.maxHealth;
+      this.player.attackValue = playerObject.attack;
+      this.player.defenseValue = playerObject.defense;
+      this.player.updateHealthBar();
     });
 
     this.socket.on('update-players-items', (playerId, playerObject) => {
-      console.log(playerObject);
+      this.players.getChildren().forEach((otherPlayer) => {
+        if (playerId === otherPlayer.id) {
+          otherPlayer.items = playerObject.items;
+          otherPlayer.maxHealth = playerObject.maxHealth;
+          otherPlayer.attackValue = playerObject.attack;
+          otherPlayer.defenseValue = playerObject.defense;
+          otherPlayer.updateHealthBar();
+        }
+      });
+    });
+
+    this.socket.on('item-removed', (itemId) => {
+      this.items.getChildren().forEach((item) => {
+        if (item.id === itemId) {
+          item.makeInactive();
+        }
+      });
     });
   }
 
@@ -331,6 +351,8 @@ export default class GameScene extends Phaser.Scene {
       item.setCollideWorldBounds(true);
     } else {
       item.id = itemObject.id;
+      item.frame = itemObject.frame;
+      item.setFrame(item.frame);
       item.setPosition(itemObject.x * 2, itemObject.y * 2);
       item.makeActive();
     }
