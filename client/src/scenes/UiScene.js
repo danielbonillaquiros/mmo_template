@@ -44,7 +44,7 @@ export default class UiScene extends Phaser.Scene {
     this.inventoryButton = this.add.image(50, this.scale.height - 50, 'inventoryButton').setInteractive();
     this.inventoryButton.setScale(2);
     this.inventoryButton.on('pointerdown', () => {
-      this.toggleInventory();
+      this.toggleInventory(this.gameScene.player, true);
     });
 
     this.input.on('pointerdown', (pointer, gameObjects) => {
@@ -73,11 +73,11 @@ export default class UiScene extends Phaser.Scene {
     }
   }
 
-  toggleInventory() {
+  toggleInventory(playerObject, mainPlayer) {
     this.showInventory = !this.showInventory;
     if (this.showInventory) {
       this.gameScene.dialogWindow.rect.disableInteractive();
-      this.inventoryWindow.showWindow();
+      this.inventoryWindow.showWindow(playerObject, mainPlayer);
     } else {
       this.gameScene.dialogWindow.rect.setInteractive();
       this.inventoryWindow.hideWindow();
