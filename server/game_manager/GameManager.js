@@ -144,6 +144,20 @@ export default class GameManager {
         }
       });
 
+      socket.on('pickup-item', (itemId) => {
+        // update the spawner
+        if (this.items[itemId]) {
+          if (this.players[socket.id].canPickupItem()) {
+            this.players[socket.id].addItem(this.items[itemId]);
+            socket.emit('update-items', this.players[socket.id]);
+            socket.broadcast.emit('update-players-items', socket.id, this.players[socket.id]);
+
+            // removing the item
+            this.spawners[this.items[itemId].spawnerId].removeObject(itemId);
+          }
+        }
+      });
+
       socket.on('pickUpChest', (chestId) => {
         // update the spawner
         if (this.chests[chestId]) {
@@ -282,6 +296,7 @@ export default class GameManager {
     // create item spawner
     config.id = 'item';
     config.spawnerType = SpawnerType.ITEM;
+    config.limit = 1;
     spawner = new Spawner(
       config,
       this.itemLocations,

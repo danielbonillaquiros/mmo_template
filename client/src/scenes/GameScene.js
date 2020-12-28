@@ -5,6 +5,7 @@ import Monster from '../classes/Monster';
 import GameMap from '../classes/GameMap';
 import { getCookie } from '../utils/utils';
 import DialogWindow from '../classes/DialogWindow';
+import Item from '../classes/Item';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -166,11 +167,21 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.socket.on('current-items', (items) => {
-      console.log(items);
+      Object.keys(items).forEach((id) => {
+        this.spawnItem(items[id]);
+      });
     });
 
     this.socket.on('item-spawned', (item) => {
-      console.log(item);
+      this.spawnItem(item);
+    });
+
+    this.socket.on('update-items', (playerObject) => {
+      console.log(playerObject);
+    });
+
+    this.socket.on('update-players-items', (playerId, playerObject) => {
+      console.log(playerObject);
     });
   }
 
@@ -299,6 +310,30 @@ export default class GameScene extends Phaser.Scene {
     // create an other players group
     this.otherPlayers = this.physics.add.group();
     this.otherPlayers.runChildUpdate = true;
+
+    // create an items group
+    this.items = this.physics.add.group();
+  }
+
+  spawnItem(itemObject) {
+    let item = this.items.getFirstDead();
+    if (!item) {
+      item = new Item(
+        this,
+        itemObject.x * 2,
+        itemObject.y * 2,
+        'tools',
+        itemObject.frame,
+        itemObject.id,
+      );
+      // add item to the items group
+      this.items.add(item);
+      item.setCollideWorldBounds(true);
+    } else {
+      item.id = itemObject.id;
+      item.setPosition(itemObject.x * 2, itemObject.y * 2);
+      item.makeActive();
+    }
   }
 
   spawnChest(chestObject) {
@@ -367,6 +402,8 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player.weapon, this.otherPlayers, this.weaponOverlapEnemy, false, this,
     );
+    // check for overlaps between player and item game objects
+    this.physics.add.overlap(this.player, this.items, this.collectItem, null, this);
   }
 
   pvpCollider(player, otherPlayer) {
@@ -386,6 +423,10 @@ export default class GameScene extends Phaser.Scene {
       this.player.swordHit = true;
       this.socket.emit('monsterAttacked', enemy.id);
     }
+  }
+
+  collectItem(player, item) {
+    this.socket.emit('pickup-item', item.id);
   }
 
   collectChest(player, chest) {
