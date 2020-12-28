@@ -57,10 +57,12 @@ export default class InventoryWindow extends ModalWindow {
   }
 
   hideWindow() {
-
+    this.rect.disableInteractive();
+    this.graphics.setAlpha(0);
   }
 
   showWindow() {
-
+    this.rect.setInteractive();
+    this.graphics.setAlpha(1);
   }
 }

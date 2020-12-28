@@ -39,6 +39,22 @@ export default class UiScene extends Phaser.Scene {
       textAlpha: 1,
       windowColor: 0x000000,
     });
+
+    // create inventory button
+    this.inventoryButton = this.add.image(50, this.scale.height - 50, 'inventoryButton').setInteractive();
+    this.inventoryButton.setScale(2);
+    this.inventoryButton.on('pointerdown', () => {
+      this.toggleInventory();
+    });
+
+    this.input.on('pointerdown', (pointer, gameObjects) => {
+      if (!gameObjects.includes(this.inventoryWindow.rect)
+        && !gameObjects.includes(this.inventoryButton)) {
+        this.gameScene.dialogWindow.rect.setInteractive();
+        this.inventoryWindow.hideWindow();
+        this.showInventory = false;
+      }
+    });
   }
 
   setupEvents() {
@@ -49,5 +65,22 @@ export default class UiScene extends Phaser.Scene {
 
   resize(gameSize) {
     if (this.inventoryWindow) this.inventoryWindow.resize(gameSize);
+
+    if (gameSize.width < 560) {
+      this.inventoryButton.y = gameSize.height - 250;
+    } else {
+      this.inventoryButton.y = gameSize.height - 50;
+    }
+  }
+
+  toggleInventory() {
+    this.showInventory = !this.showInventory;
+    if (this.showInventory) {
+      this.gameScene.dialogWindow.rect.disableInteractive();
+      this.inventoryWindow.showWindow();
+    } else {
+      this.gameScene.dialogWindow.rect.setInteractive();
+      this.inventoryWindow.hideWindow();
+    }
   }
 }
