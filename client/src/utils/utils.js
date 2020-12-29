@@ -71,5 +71,5 @@ export function refreshTokenInterval() {
         window.alert('Token is no longer valid, please login again');
         window.location.replace('/index.html');
       });
-  });
+  }, parseInt(TOKEN_INTERVAL, 10));
 }
