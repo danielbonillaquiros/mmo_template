@@ -16,8 +16,6 @@ export default class PlayerModel {
 
     const location = this.generateLocation(players);
     [this.x, this.y] = location;
-    this.x = 180;
-    this.y = 200;
   }
 
   canPickupItem() {
@@ -29,9 +27,15 @@ export default class PlayerModel {
 
   addItem(item) {
     this.playerItems[item.id] = item;
+    this.attack += item.attackBonus;
+    this.defense += item.defenseBonus;
+    this.maxHealth += item.healthBonus;
   }
 
   removeItem(itemId) {
+    this.attack -= this.playerItems[itemId].attackBonus;
+    this.defense -= this.playerItems[itemId].defenseBonus;
+    this.maxHealth -= this.playerItems[itemId].healthBonus;
     delete this.playerItems[itemId];
   }
 

@@ -146,6 +146,7 @@ export default class GameManager {
 
       socket.on('player-dropped-item', (itemId) => {
         this.players[socket.id].removeItem(itemId);
+        socket.emit('update-items', this.players[socket.id]);
         socket.broadcast.emit('update-players-items', socket.id, this.players[socket.id]);
       });
 
@@ -302,7 +303,8 @@ export default class GameManager {
     // create item spawner
     config.id = 'item';
     config.spawnerType = SpawnerType.ITEM;
-    config.limit = 1;
+    config.limit = 3;
+    config.spawnInterval = 1000 * 60 * 5;
     spawner = new Spawner(
       config,
       this.itemLocations,
