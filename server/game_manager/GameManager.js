@@ -144,6 +144,11 @@ export default class GameManager {
         }
       });
 
+      socket.on('player-dropped-item', (itemId) => {
+        this.players[socket.id].removeItem(itemId);
+        socket.broadcast.emit('update-players-items', socket.id, this.players[socket.id]);
+      });
+
       socket.on('pickup-item', (itemId) => {
         // update the spawner
         if (this.items[itemId]) {

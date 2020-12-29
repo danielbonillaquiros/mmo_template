@@ -31,8 +31,8 @@ export default class PlayerModel {
     this.playerItems[item.id] = item;
   }
 
-  removeItem(item) {
-    delete this.playerItems[item.id];
+  removeItem(itemId) {
+    delete this.playerItems[itemId];
   }
 
   playerAttacked(attack) {

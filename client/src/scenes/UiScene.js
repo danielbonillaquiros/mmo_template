@@ -49,7 +49,12 @@ export default class UiScene extends Phaser.Scene {
 
     this.input.on('pointerdown', (pointer, gameObjects) => {
       if (!gameObjects.includes(this.inventoryWindow.rect)
-        && !gameObjects.includes(this.inventoryButton)) {
+        && !gameObjects.includes(this.inventoryButton)
+        && !gameObjects.includes(this.inventoryWindow.inventoryItems[0].discardButton)
+        && !gameObjects.includes(this.inventoryWindow.inventoryItems[1].discardButton)
+        && !gameObjects.includes(this.inventoryWindow.inventoryItems[2].discardButton)
+        && !gameObjects.includes(this.inventoryWindow.inventoryItems[3].discardButton)
+        && !gameObjects.includes(this.inventoryWindow.inventoryItems[4].discardButton)) {
         this.gameScene.dialogWindow.rect.setInteractive();
         this.inventoryWindow.hideWindow();
         this.showInventory = false;

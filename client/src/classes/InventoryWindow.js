@@ -134,6 +134,11 @@ export default class InventoryWindow extends ModalWindow {
     this.createInventoryItems();
   }
 
+  removeItem(itemNumber) {
+    this.playerObject.dropItem(itemNumber);
+    this.showWindow(this.playerObject, this.mainPlayer);
+  }
+
   createInventoryItems() {
     for (let x = 0; x < 5; x += 1) {
       const yPos = 0 + 55 * x;
@@ -145,6 +150,9 @@ export default class InventoryWindow extends ModalWindow {
       // create discard item button
       this.inventoryItems[x].discardButton = this.scene.add.image(0, yPos, 'inventoryRemove').setScale(0.75).setInteractive();
       this.itemsContainer.add(this.inventoryItems[x].discardButton);
+      this.inventoryItems[x].discardButton.on('pointerdown', () => {
+        this.removeItem(x);
+      });
 
       // create item name text
       this.inventoryItems[x].itemName = this.scene.add.text(0, yPos - 10, 'Item 1 Name', { fontSize: '14px', fill: '#ffffff' });
