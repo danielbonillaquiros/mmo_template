@@ -107,8 +107,17 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
+    this.socket.on('update-players-score', (playerId, goldAmount) => {
+      this.otherPlayers.getChildren().forEach((otherPlayer) => {
+        if (playerId === otherPlayer.id) {
+          otherPlayer.gold = goldAmount;
+        }
+      });
+    });
+
     this.socket.on('updateScore', (goldAmount) => {
       this.events.emit('updateScore', goldAmount);
+      this.player.gold = goldAmount;
     });
 
     this.socket.on('updateMonsterHealth', (monsterId, health) => {
@@ -321,6 +330,11 @@ export default class GameScene extends Phaser.Scene {
     } else {
       this.player = newPlayerGameObject;
     }
+
+    newPlayerGameObject.setInteractive();
+    newPlayerGameObject.on('pointerdown', () => {
+      this.events.emit('show-inventory', newPlayerGameObject, mainPlayer);
+    });
   }
 
   createGroups() {

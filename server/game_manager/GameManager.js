@@ -171,6 +171,7 @@ export default class GameManager {
           // updating the players gold
           this.players[socket.id].updateGold(gold);
           socket.emit('updateScore', this.players[socket.id].gold);
+          socket.broadcast.emit('update-players-score', socket.id, this.players[socket.id].gold);
 
           // removing the chest
           this.spawners[this.chests[chestId].spawnerId].removeObject(chestId);
