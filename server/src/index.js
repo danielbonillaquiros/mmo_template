@@ -58,10 +58,10 @@ app.get('/game.html', passport.authenticate('jwt', { session: false }), (request
   response.status(200).json(request.user);
 });
 
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/../public')));
 
 app.get('/', (request, response) => {
-  response.send(path.join(__dirname, '/index.html'));
+  response.send(path.join(__dirname, '/../index.html'));
 });
 
 // setup routes

@@ -1,11 +1,11 @@
 import { v4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import PlayerModel from './PlayerModel';
-import * as levelData from '../public/assets/level/large_level.json';
+import * as levelData from '../../public/assets/level/large_level.json';
 import Spawner from './Spawner';
 import { SpawnerType } from './utils';
 import ChatModel from '../models/ChatModel';
-import * as itemData from '../public/assets/level/tools.json';
+import * as itemData from '../../public/assets/level/tools.json';
 
 export default class GameManager {
   constructor(io) {

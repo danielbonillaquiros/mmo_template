@@ -2,7 +2,7 @@ import { SpawnerType, randomNumber } from './utils';
 import ChestModel from './ChestModel';
 import MonsterModel from './MonsterModel';
 import ItemModel from './ItemModel';
-import * as itemData from '../public/assets/level/tools.json';
+import * as itemData from '../../public/assets/level/tools.json';
 
 function getRandomBonusValue() {
   const bonusValues = [-10, -7, -5, 0, 3, 5, 7, 10, 12, 15];
